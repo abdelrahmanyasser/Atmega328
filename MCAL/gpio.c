@@ -3,7 +3,11 @@
  *  @breif: Gpio module driver for atmega328p
  */
 
+/* Includes */
+#include <avr/io.h> /* for register names */
+
 #include "gpio.h"
+
 /* Private */
 static void gpio_setPinDirection(port_t port, pin_t pin, pinDirection_t direction);
 
