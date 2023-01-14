@@ -6,9 +6,9 @@
 #ifndef GPIO_CFG_H
 #define GPIO_CFG_H
 
-#define NUM_OF_CONFIG_PINS (10)
+#include "gpio.h"
 
-extern pinConfig_t gpioConfigSet[NUM_OF_CONFIG_PINS];
-
+extern uint8 numOfConfiguredPins;
+extern pinConfig_t gpioConfigSet[];
 
 #endif

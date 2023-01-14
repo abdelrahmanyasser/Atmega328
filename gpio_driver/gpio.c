@@ -7,6 +7,7 @@
 #include <avr/io.h> /* for register names */
 
 #include "gpio.h"
+#include "gpio_Cfg.h"
 
 /* Private */
 static void gpio_setPinDirection(port_t port, pin_t pin, pinDirection_t direction);
@@ -16,14 +17,14 @@ static void gpio_setPinDirection(port_t port, pin_t pin, pinDirection_t directio
 void gpio_init(void)
 {
     int i;
-    for (i = 0; i < NUM_OF_CONFIG_PINS; i++ )
+    for (i = 0; i < numOfConfiguredPins; i++ )
     {
-        gpio_setPinDirection((gpioConfigSet[i]->port), (gpioConfigSet[i]->pin), (gpioConfigSet[i]->direction));
+        gpio_setPinDirection((gpioConfigSet[i].port), (gpioConfigSet[i].pin), (gpioConfigSet[i].direction));
 
         /* Output default level (PIN_LOW) on output pins */
-        if ((gpioConfigSet[i]->direction) == PIN_OUTPUT)
+        if ((gpioConfigSet[i].direction) == PIN_OUTPUT)
         {
-            gpio_writeChannel((gpioConfigSet[i]->port), (gpioConfigSet[i]->pin), PIN_LOW);
+            gpio_writeChannel((gpioConfigSet[i].port), (gpioConfigSet[i].pin), PIN_LOW);
         }
     }
 
@@ -33,18 +34,7 @@ void gpio_writeChannel(port_t port, pin_t pin, pinLevel_t level)
 {
     switch(port)
     {
-        case PORTA:
-        if ( level == PIN_LOW)
-        {
-            CLEAR_BIT(PORTA, pin);
-        }
-        else
-        {
-            SET_BIT(PORTA, pin);
-        }
-        break;
-
-        case PORTB:
+        case PORT_B:
         if ( level == PIN_LOW)
         {
             CLEAR_BIT(PORTB, pin);
@@ -55,7 +45,7 @@ void gpio_writeChannel(port_t port, pin_t pin, pinLevel_t level)
         }
         break;
 
-        case PORTC:
+        case PORT_C:
         if ( level == PIN_LOW)
         {
             CLEAR_BIT(PORTC, pin);
@@ -66,7 +56,7 @@ void gpio_writeChannel(port_t port, pin_t pin, pinLevel_t level)
         }
         break;
 
-        case PORTD:
+        case PORT_D:
         if ( level == PIN_LOW)
         {
             CLEAR_BIT(PORTD, pin);
@@ -86,8 +76,8 @@ pinLevel_t gpio_readChannel(port_t port, pin_t pin)
 
     switch(port)
     {
-        case PORTA:
-        if ( PINA & (1<<pin) == 1)
+        case PORT_B:
+        if (BIT_IS_SET(PINB, pin))
         {
             return_value = PIN_HIGH;
         }
@@ -97,8 +87,8 @@ pinLevel_t gpio_readChannel(port_t port, pin_t pin)
         }
         break;
 
-        case PORTB:
-        if ( PINB & (1<<pin) == 1)
+        case PORT_C:
+        if (BIT_IS_SET(PINC, pin))
         {
             return_value = PIN_HIGH;
         }
@@ -108,19 +98,8 @@ pinLevel_t gpio_readChannel(port_t port, pin_t pin)
         }
         break;
 
-        case PORTC:
-        if ( PINC & (1<<pin) == 1)
-        {
-            return_value = PIN_HIGH;
-        }
-        else
-        {
-            return_value = PIN_LOW;
-        }
-        break;
-
-        case PORTD:
-        if ( PIND & (1<<pin) == 1)
+        case PORT_D:
+        if ( BIT_IS_SET(PIND, pin))
         {
             return_value = PIN_HIGH;
         }
@@ -138,19 +117,15 @@ void gpio_writePort(port_t port, portLevel_t level)
 {
     switch(port)
     {
-        case PORTA:
-        PORTA = level;
-        break;
-
-        case PORTB:
+        case PORT_B:
         PORTB = level;
         break;
 
-        case PORTC:
+        case PORT_C:
         PORTC = level;
         break;
 
-        case PORTD:
+        case PORT_D:
         PORTD = level;
         break;
     }
@@ -162,19 +137,15 @@ portLevel_t gpio_readPort(port_t port)
 
     switch(port)
     {
-        case PORTA:
-        return_level = PINA;
-        break;
-
-        case PORTB:
+        case PORT_B:
         return_level = PINB;
         break;
 
-        case PORTC:
+        case PORT_C:
         return_level = PINC;
         break;
 
-        case PORTD:
+        case PORT_D:
         return_level = PIND;
         break;
     }
@@ -185,18 +156,7 @@ static void gpio_setPinDirection(port_t port, pin_t pin, pinDirection_t directio
 {
     switch(port)
     {
-        case PORTA:
-        if (direction == PIN_OUTPUT)
-        {
-            SET_BIT(DDRA, pin);
-        }
-        else
-        {
-            CLEAR_BIT(DDRA, pin);
-        }
-        break;
-
-        case PORTB:
+        case PORT_B:
         if (direction == PIN_OUTPUT)
         {
             SET_BIT(DDRB, pin);
@@ -207,7 +167,7 @@ static void gpio_setPinDirection(port_t port, pin_t pin, pinDirection_t directio
         }
         break;
 
-        case PORTC:
+        case PORT_C:
         if (direction == PIN_OUTPUT)
         {
             SET_BIT(DDRC, pin);
@@ -218,7 +178,7 @@ static void gpio_setPinDirection(port_t port, pin_t pin, pinDirection_t directio
         }
         break;
 
-        case PORTC:
+        case PORT_D:
         if (direction == PIN_OUTPUT)
         {
             SET_BIT(DDRD, pin);

@@ -6,32 +6,35 @@
 #ifndef GPIO_H
 #define GPIO_H
 
+#include <avr/io.h>
+
 /* Includes */
-#include "gpio_Cfg.h"
+#include "std_types.h"
 
 /* Constant macros */
-#define SET_BIT(reg, bit) ((reg |= (1 << (bit)))
-#define CLEAR_BIT(reg, bit) ((reg &= ~(1 << (bit)))
+#define SET_BIT(reg, bit) (((reg) |= (1 << (bit))))
+#define CLEAR_BIT(reg, bit) (((reg) &= ~(1 << (bit))))
+#define BIT_IS_SET(reg, bit) ((reg) & (1<<bit))
+#define BIT_IS_CLEAR(reg, bit) (!((reg) & (1<<bit)))
 
 /* Types */
 typedef enum
 {
-    PIN0,
-    PIN1,
-    PIN2,
-    PIN3,
-    PIN4,
-    PIN5,
-    PIN6,
-    PIN7
+    PIN_0,
+    PIN_1,
+    PIN_2,
+    PIN_3,
+    PIN_4,
+    PIN_5,
+    PIN_6,
+    PIN_7
 } pin_t;
 
 typedef enum
 {
-    PORTA,
-    PORTB,
-    PORTC,
-    PORTD
+    PORT_B,
+    PORT_C,
+    PORT_D
 } port_t;
 
 typedef enum
@@ -65,9 +68,9 @@ typedef enum
 
 typedef struct
 {
-    port_t port;
-    pin_t pin;
-    pinDir_t direction;
+    uint8 port;
+    uint8 pin;
+    uint8 direction;
 } pinConfig_t;
 
 /* Public APIs */
