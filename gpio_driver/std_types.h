@@ -18,6 +18,14 @@
 #define NULL ((void*)0)
 #endif
 
+#ifndef LOGIC_LOW
+#define LOGIC_LOW (0u)
+#endif
+
+#ifndef LOGIC_HIGH
+#define LOGIC_HIGH (1u)
+#endif
+
 typedef unsigned char uint8;
 typedef signed char sint8;
 
